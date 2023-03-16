@@ -50,7 +50,7 @@ def get_weather_emoji(weather_icon):
 
 OPEN_WEATHER_API_KEY = os.environ["OPEN_WEATHER_API_KEY"]
 TELEGRAM_TOKEN = os.environ["TELEGRAM_TOKEN"]
-TELEGRAM_CHATS_ID = os.environ["TELEGRAM_CHATS_ID"].split()
+TELEGRAM_CHATS_ID = os.environ["TELEGRAM_CHATS_ID"].split(",")
 
 cities = {("Catania", "IT"): None, ("Udine", "IT"): None}
 
@@ -64,6 +64,9 @@ for name_country in cities:
 
 message = "\n".join(city_message(city) for city in cities.values())
 
-bot = telegram.Bot(TELEGRAM_TOKEN)
-for chat_id in TELEGRAM_CHATS_ID:
-    asyncio.run(bot.send_message(text=message, chat_id=chat_id))
+async def main():
+    bot = telegram.Bot(TELEGRAM_TOKEN)
+    for chat_id in TELEGRAM_CHATS_ID:
+        await bot.send_message(text=message, chat_id=chat_id)
+
+asyncio.run(main())
