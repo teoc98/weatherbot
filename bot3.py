@@ -1,7 +1,6 @@
 from openweather import OpenWeatherAPI
 from requests import Request, Session
 from requests_cache import CachedSession
-import numpy as np
 import telegram
 import asyncio
 from datetime import date
