@@ -15,8 +15,8 @@ pprint = _pretty_printer.pprint
 
 
 ## constructs a message about a city's weather
-def city_message(city):
-    r = owSession.send(
+def city_message(city, session):
+    r = session.send(
         owAPI.onecall(
             lat=city["lat"],
             lon=city["lon"],
@@ -57,12 +57,13 @@ cities = {("Catania", "IT"): None, ("Udine", "IT"): None}
 
 owAPI = OpenWeatherAPI(OPEN_WEATHER_API_KEY)
 owSession = CachedSession("ow_cache", cache_control=True)
+owSessionUncached = Session()
 
 for name_country in cities:
     r = owSession.send(owAPI.direct_geocoding(*name_country).prepare()).json()
     cities[name_country] = r[0]
 
-message = "\n".join(city_message(city) for city in cities.values())
+message = "\n".join(city_message(city, owSessionUncached) for city in cities.values())
 
 async def main():
     bot = telegram.Bot(TELEGRAM_TOKEN)
